@@ -9,31 +9,40 @@ namespace brussens\maintenance\filters;
 
 use brussens\maintenance\Filter;
 use dmstr\web\User;
+use yii\console\Exception;
+use yii\web\NotFoundHttpException;
+use yii\web\Request;
 
 /**
  * Class RoleFilter
  * @package brussens\maintenance\filters
  */
-class RoleFilter extends Filter
+class RoleRouteFilter extends RoleFilter
 {
     /**
      * @var array
      */
-    public $roles;
+    public $routes;
+
     /**
-     * @var User
+     * @var string
      */
-    protected $user;
+    protected $currentRoute;
+
 
     /**
      * RoleChecker constructor.
+     *
      * @param User $user
      * @param array $config
+     *
+     * @throws NotFoundHttpException
+     * @throws Exception
      */
     public function __construct(User $user, array $config = [])
     {
-        $this->user = $user;
-        parent::__construct($config);
+        $this->currentRoute = \Yii::$app->getRequest()->resolve()[0];
+        parent::__construct($user, $config);
     }
 
     /**
@@ -41,8 +50,8 @@ class RoleFilter extends Filter
      */
     public function init()
     {
-        if (is_string($this->roles)) {
-            $this->roles = [$this->roles];
+        if (is_string($this->routes)) {
+            $this->routes = [$this->routes];
         }
         parent::init();
     }
@@ -52,13 +61,11 @@ class RoleFilter extends Filter
      */
     public function isAllowed()
     {
-        if (is_array($this->roles) && !empty($this->roles)) {
-            foreach ($this->roles as $role) {
-                if ($this->user->can($role)) {
-                    return true;
-                }
-            }
+        $isAllowed = parent::isAllowed();
+        if (($isAllowed === false) && is_array($this->routes) && !empty($this->routes)) {
+            return in_array($this->currentRoute, $this->routes, true);
         }
-        return false;
+
+        return $isAllowed;
     }
 }
