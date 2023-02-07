@@ -8,7 +8,7 @@
 namespace brussens\maintenance\filters;
 
 use brussens\maintenance\Filter;
-use dmstr\web\User;
+use yii\web\User;
 
 /**
  * Class RoleFilter

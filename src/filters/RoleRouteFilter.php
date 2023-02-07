@@ -7,11 +7,10 @@
 
 namespace brussens\maintenance\filters;
 
-use brussens\maintenance\Filter;
 use dmstr\web\User;
 use yii\console\Exception;
 use yii\web\NotFoundHttpException;
-use yii\web\Request;
+use Yii;
 
 /**
  * Class RoleFilter
@@ -33,16 +32,15 @@ class RoleRouteFilter extends RoleFilter
     /**
      * RoleChecker constructor.
      *
-     * @param User $user
      * @param array $config
      *
      * @throws NotFoundHttpException
      * @throws Exception
      */
-    public function __construct(User $user, array $config = [])
+    public function __construct(array $config = [])
     {
-        $this->currentRoute = \Yii::$app->getRequest()->resolve()[0];
-        parent::__construct($user, $config);
+        $this->currentRoute = Yii::$app->getRequest()->resolve()[0];
+        parent::__construct(Yii::$app->getUser(), $config);
     }
 
     /**
