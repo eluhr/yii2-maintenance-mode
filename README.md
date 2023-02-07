@@ -5,13 +5,13 @@
 ## Install
 Either run
 ```
-php composer.phar require --prefer-dist brussens/yii2-maintenance-mode "*"
+php composer.phar require --prefer-dist eluhr/yii2-maintenance-mode "*"
 ```
 
 or add
 
 ```
-"brussens/yii2-maintenance-mode": "*"
+"eluhr/yii2-maintenance-mode": "*"
 ```
 
 to the require section of your `composer.json` file.
